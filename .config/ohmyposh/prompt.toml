@@ -36,6 +36,18 @@ type = 'rprompt'
 overflow = 'hidden'
 
 [[blocks.segments]]
+type = 'python'
+style = 'plain'
+foreground = 'p:grey'
+background = 'transparent'
+template = '{{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }} '
+
+[blocks.segments.properties]
+display_mode = "environment"
+fetch_virtual_env = true
+home_enabled = true
+
+[[blocks.segments]]
 type = 'executiontime'
 style = 'plain'
 foreground = 'yellow'
