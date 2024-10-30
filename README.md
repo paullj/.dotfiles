@@ -1,6 +1,6 @@
-### .dotfiles
+## .dotfiles
 
-To use these dotfiles, you will need to install the following dependencies:
+To use these dotfiles, you will need the following dependencies:
 
 - stow
 - coreutils
