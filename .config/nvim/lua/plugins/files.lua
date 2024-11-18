@@ -111,7 +111,7 @@ return {
 			local keymap = require("helpers.keys").map
 			keymap("n", "ga", git_add, "Git add/stage file")
 
-			vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
+			-- vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
 			vim.api.nvim_create_autocmd({ "BufEnter", "CursorMoved" }, {
 				pattern = "NvimTree_*",
 				callback = function()

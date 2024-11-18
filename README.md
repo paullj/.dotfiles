@@ -1,4 +1,4 @@
-## .dotfiles
+# .dotfiles
 
 To use these dotfiles, you will need the following dependencies:
 
@@ -33,7 +33,7 @@ Run stow to symlink the files
 stow .
 ```
 
-#### TODO
+## TODO
 
 - Make cmd+z undo redo work
 - Short cut for go to beginning of line and end of line
