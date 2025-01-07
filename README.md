@@ -32,9 +32,3 @@ Run stow to symlink the files
 ```bash
 stow .
 ```
-
-## TODO
-
-- Make cmd+z undo redo work
-- Short cut for go to beginning of line and end of line
-- Short cut for deleting a whole line
