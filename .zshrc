@@ -45,11 +45,11 @@ fi
 
 # Key bindings
 bindkey -e
-bindkey '\e[1;9D' beginning-of-line     # cmd+left
-bindkey '\e[1;9C' end-of-line           # cmd+right
-bindkey '\e[1;9Z' undo                  # cmd+z
-bindkey '\e[1;10Z' redo                 # cmd+shift+z
-bindkey '\e[3;9~' backward-kill-line    # cmd+backspace
+# bindkey '\e[1;9D' beginning-of-line     # cmd+left
+# bindkey '\e[1;9C' end-of-line           # cmd+right
+# bindkey '\e[1;9Z' undo                  # cmd+z
+# bindkey '\e[1;10Z' redo                 # cmd+shift+z
+# bindkey '\e[3;9~' backward-kill-line    # cmd+backspace
 # bindkey "^p" history-search-backward
 # bindkey "^n" history-search-forward
 
@@ -81,11 +81,22 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'gls --hyperlink --color $re
 # Aliases
 alias ls='gls --hyperlink --color'
 alias vim='nvim'
+
 # Shell integration
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
+
+
+## Optional Tools
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+
+# cargo
+. "$HOME/.cargo/env"
+
+# bun
+export BUN_INSTALL="$HOME/Library/Application Support/reflex/bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
