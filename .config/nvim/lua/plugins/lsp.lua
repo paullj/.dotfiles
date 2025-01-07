@@ -13,8 +13,6 @@ local function get_lsp_servers()
 	return servers
 end
 
-servers = get_lsp_servers()
-
 return {
 	{
 		"williamboman/mason.nvim",
@@ -67,8 +65,8 @@ return {
 		end,
 		init = function()
 			local default_diagnostic_config = {
-				virtual_text = true,
-				update_in_insert = true,
+				virtual_text = false,
+				update_in_insert = false,
 				underline = true,
 				severity_sort = true,
 				float = {
@@ -89,54 +87,35 @@ return {
 			vim.lsp.handlers["textDocument/signatureHelp"] =
 				vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 			require("lspconfig.ui.windows").default_options.border = "rounded"
-
-			-- vim.api.nvim_create_autocmd("LspAttach", {
-			-- 	group = vim.api.nvim_create_augroup("lsp-attach-format", { clear = true }),
-			-- 	-- This is where we attach the autoformatting for reasonable clients
-			-- 	callback = function(args)
-			-- 		local client_id = args.data.client_id
-			-- 		local client = vim.lsp.get_client_by_id(client_id)
-			-- 		local bufnr = args.buf
-			-- 		if not client.server_capabilities.documentFormattingProvider then
-			-- 			return
-			-- 		end
-			-- 		vim.api.nvim_create_autocmd("BufWritePre", {
-			-- 			group = get_augroup(client),
-			-- 			buffer = bufnr,
-			-- 			callback = function()
-			-- 				if not format_is_enabled then
-			-- 					return
-			-- 				end
-			-- 				vim.lsp.buf.format({
-			-- 					async = false,
-			-- 					filter = function(c)
-			-- 						return c.id == client.id
-			-- 					end,
-			-- 				})
-			-- 			end,
-			-- 		})
-			-- 	end,
-			-- })
-		end,
-		toggle_inlay_hints = function()
-			local bufnr = vim.api.nvim_get_current_buf()
-			local enabled = vim.lsp.inlay_hint.get_status(bufnr)
-			vim.lsp.inlay_hint.set_status(bufnr, not enabled)
 		end,
 		on_attach = function(client, bufnr)
-			if client.supports_method("textDocument/inlayHint") then
-				vim.lsp.inlay_hint.enable(bufnr, true)
-			end
+			vim.api.nvim_create_autocmd("CursorHold", {
+				buffer = bufnr,
+				callback = function()
+					local opts = {
+						focusable = false,
+						close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+						border = "rounded",
+						source = "always",
+						prefix = " ",
+						scope = "cursor",
+					}
+					vim.diagnostic.open_float(nil, opts)
+				end,
+			})
 		end,
 		keys = {
-			{ "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "Rename" },
 			{ "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", desc = "Format" },
 			{ "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<cr>", desc = "Fix" },
 			{ "<leader>lj", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "Next Diagnostic" },
 			{ "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Prev Diagnostic" },
-			{ "<leader>lh", "<cmd>lua require('plugins.lsp').toggle_inlay_hints()<cr>", desc = "Toggle Hints" },
-			{ "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "Code Action" },
-			{ "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens Action" },
+			{ "<leader>ld", "<cmd>lua vim.diagnostic.open_float()<cr>", desc = "Line Diagnostics" },
+			{ "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "Rename" },
+			{ "<leader>lF", "<cmd>Telescope lsp_references<cr>", desc = "References" },
+			{ "<leader>ld", "<cmd>Telescope lsp_definitions<cr>", desc = "Goto Definition" },
+			{ "<leader>lD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
+			{ "<leader>lI", "<cmd>Telescope lsp_implementations<cr>", desc = "Goto Implementation" },
+			{ "<leader>lT", "<cmd>Telescope lsp_type_definitions<cr>", desc = "Goto Type Definition" },
 		},
 	},
 	{
@@ -157,4 +136,16 @@ return {
 			sources = {},
 		},
 	},
+	{
+		"folke/lazydev.nvim",
+		ft = "lua", -- only load on lua files
+		opts = {
+			library = {
+				-- See the configuration section for more details
+				-- Load luvit types when the `vim.uv` word is found
+				{ path = "luvit-meta/library", words = { "vim%.uv" } },
+			},
+		},
+	},
+	{ "Bilal2453/luvit-meta", lazy = true },
 }

@@ -7,7 +7,7 @@ return {
 		spec = {
 			{
 				mode = { "n", "v" },
-				{ "<leader>q", "<cmd>confirm q<CR>", icon = "󰅘",  desc = "Quit" },
+				{ "<leader>q", icon = "󰅘",  desc = "Quit" },
 				{ "<leader>Q", "<cmd>confirm qa<CR>",  icon = "󰱞",desc = "Quit All"},
 				{ "<leader>;", icon = "", desc = "Terminal" },
 				{ "<leader>f", icon = "", desc = "Find" },

@@ -29,6 +29,7 @@ return {
 		},
     -- stylua: ignore
     keys = {
+			{ "<leader>q", "<cmd>BufferClose<cr>", desc = "Close" },
       { "<leader>tp", "<Cmd>BufferPick<CR>", desc = "Pick" },
 		  { "<leader>tn", "<cmd>$tabnew<cr>",   desc = "New Empty Tab" },
       { "<leader>tN", "<cmd>tabnew %<cr>",   desc = "New Tab" },

@@ -10,7 +10,7 @@ local logo = [[
 ]]
 
 local buttons = {
-	{ icon = "", desc = "Open recent project", key = "l", action = "NeovimProjectLoadRecent" },
+	{ icon = "", desc = "Restore Session", key = "l", action = "NeovimProjectLoadRecent" },
 	{ icon = "", desc = "Find project", key = "p", action = "NeovimProjectDiscover" },
 	{ icon = "", desc = "Find file", key = "f", action = "Telescope find_files" },
 	{ icon = "", desc = "New file", key = "n", action = "ene | startinsert" },
@@ -30,23 +30,48 @@ end
 return {
 	"nvimdev/dashboard-nvim",
 	event = "VimEnter",
-	opts = {
-		theme = "doom",
-		disable_move = true,
-		shortcut_type = "letter",
-		hide = {
-			tabline = true,
-			winbar = true,
-		},
-		config = {
-			header = vim.split(logo, "\n"),
-			-- stylua: ignore
-			center = buttons,
-			footer = function()
-				local stats = require("lazy").stats()
-				local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-				return { "Loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
-			end,
-		},
-	},
+
+	config = function()
+		local function get_project_for_cwd()
+			local projects = require("neovim-project.utils.path").get_all_projects()
+
+			for _, project in pairs(projects) do
+				if project.root == vim.fn.getcwd() then
+					return project
+				end
+			end
+			return nil
+		end
+
+		local project_for_cwd = get_project_for_cwd()
+		if project_for_cwd then
+			table.insert(buttons, 1, {
+				icon = "",
+				desc = "Open current project",
+				key = "O",
+				action = "NeovimProjectLoad " .. project_for_cwd.name,
+			})
+		end
+
+		opts = {
+			theme = "doom",
+			disable_move = true,
+			shortcut_type = "letter",
+			hide = {
+				tabline = true,
+				winbar = true,
+			},
+			config = {
+				header = vim.split(logo, "\n"),
+				center = buttons,
+				footer = function()
+					local stats = require("lazy").stats()
+					local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+					return { "Loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
+				end,
+			},
+		}
+
+		require("dashboard").setup(opts)
+	end,
 }
