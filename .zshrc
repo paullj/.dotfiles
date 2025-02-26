@@ -34,10 +34,6 @@ zinit light aloxaf/fzf-tab
 
 export AUTOSWITCH_SILENT=TRUE && zinit wait lucid for michaelaquilina/zsh-autoswitch-virtualenv
 
-# Add oh-my-zsh snippets
-zinit snippet OMZP::command-not-found
-export ZSH_TMUX_AUTOSTART=TRUE && zinit snippet OMZP::tmux
-
 # Load oh-my-posh (as long as we're not in Apple Terminal)
 if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
     eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/prompt.toml)"
