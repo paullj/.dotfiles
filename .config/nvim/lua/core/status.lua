@@ -139,7 +139,7 @@ function Statusline.inactive()
 end
 
 function Statusline.short()
-	return "%#StatusLineNC#Explorer"
+	return "%#StatusLineNC#File Explorer"
 end
 
 vim.api.nvim_exec(

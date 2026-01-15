@@ -33,7 +33,15 @@ return {
 
 	config = function()
 		local function get_project_for_cwd()
-			local projects = require("neovim-project.utils.path").get_all_projects()
+			local ok, project_utils = pcall(require, "neovim-project.utils.path")
+			if not ok then
+				return nil
+			end
+
+			local ok2, projects = pcall(project_utils.get_all_projects)
+			if not ok2 or not projects then
+				return nil
+			end
 
 			for _, project in pairs(projects) do
 				if project.root == vim.fn.getcwd() then

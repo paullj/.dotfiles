@@ -105,17 +105,25 @@ return {
 			})
 		end,
 		keys = {
-			{ "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", desc = "Format" },
-			{ "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<cr>", desc = "Fix" },
-			{ "<leader>lj", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "Next Diagnostic" },
-			{ "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Prev Diagnostic" },
-			{ "<leader>ld", "<cmd>lua vim.diagnostic.open_float()<cr>", desc = "Line Diagnostics" },
+			-- Standard vim-style navigation
+			{ "gd", "<cmd>Telescope lsp_definitions<cr>", desc = "Goto Definition" },
+			{ "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
+			{ "gi", "<cmd>Telescope lsp_implementations<cr>", desc = "Goto Implementation" },
+			{ "gr", "<cmd>Telescope lsp_references<cr>", desc = "Goto References" },
+			{ "gt", "<cmd>Telescope lsp_type_definitions<cr>", desc = "Goto Type Definition" },
+			{ "K", vim.lsp.buf.hover, desc = "Hover Documentation" },
+			{ "gK", vim.lsp.buf.signature_help, desc = "Signature Help" },
+
+			-- Diagnostics navigation
+			{ "[d", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Previous Diagnostic" },
+			{ "]d", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "Next Diagnostic" },
+			{ "gl", "<cmd>lua vim.diagnostic.open_float()<cr>", desc = "Line Diagnostics" },
+
+			-- Actions with leader
 			{ "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "Rename" },
-			{ "<leader>lF", "<cmd>Telescope lsp_references<cr>", desc = "References" },
-			{ "<leader>ld", "<cmd>Telescope lsp_definitions<cr>", desc = "Goto Definition" },
-			{ "<leader>lD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
-			{ "<leader>lI", "<cmd>Telescope lsp_implementations<cr>", desc = "Goto Implementation" },
-			{ "<leader>lT", "<cmd>Telescope lsp_type_definitions<cr>", desc = "Goto Type Definition" },
+			{ "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "Code Action" },
+			{ "<leader>lf", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", desc = "Format" },
+			{ "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<cr>", desc = "Quickfix Diagnostics" },
 		},
 	},
 	{

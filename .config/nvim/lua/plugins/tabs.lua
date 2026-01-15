@@ -13,6 +13,9 @@ return {
 			animation = false,
 			tabpages = true,
 			focus_on_close = "previous",
+			auto_hide = false,
+			exclude_ft = { "qf", "NvimTree", "toggleterm" },
+			exclude_name = { "NvimTree", "[No Name]" },
 			icons = {
 				filetype = { enabled = false },
 				buffer_index = false,
@@ -29,7 +32,7 @@ return {
 		},
     -- stylua: ignore
     keys = {
-			{ "<leader>q", "<cmd>BufferClose<cr>", desc = "Close" },
+			{ "<leader>q", "<cmd>BufferClose!<cr>", desc = "Close" },
       { "<leader>tp", "<Cmd>BufferPick<CR>", desc = "Pick" },
 		  { "<leader>tn", "<cmd>$tabnew<cr>",   desc = "New Empty Tab" },
       { "<leader>tN", "<cmd>tabnew %<cr>",   desc = "New Tab" },

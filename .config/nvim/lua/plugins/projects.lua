@@ -4,8 +4,9 @@ return {
 	"coffebar/neovim-project",
 	opts = {
 		projects = {
-			"~/development/*",
-			"~/.dotfiles/",
+			"~/Projects/paullj/*",
+			"~/Projects/automata-tech/*",
+			"~/Projects/paullj/.dotfiles",
 		},
 		dashboard_mode = true,
 		picker = { type = "telescope" },
