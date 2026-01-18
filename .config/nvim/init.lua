@@ -1,8 +1,2 @@
--- Handle plugins with lazy.nvim
-require("core.lazy")
--- General Neovim keymaps
-require("core.keymaps")
--- Other options
-require("core.options")
--- Status line
-require("core.status")
+-- bootstrap lazy.nvim, LazyVim and your plugins
+require("config.lazy")
