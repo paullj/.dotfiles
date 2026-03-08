@@ -5,15 +5,19 @@ To use these dotfiles, you will need the following dependencies:
 - `stow`. sym-link configs
 - `zoxide`. cd into recent folders
 - `fzf`. fuzzy finder
-- `oh-my-posh`. terminal prompt 
-- `neovim`
+- `ripgrep`. better grep
+- `fd`. better find:
+- `starship`. terminal prompt 
+- `neovim`. text editor
 - `eza`. better ls
 - `bat`. better cat
+- `tmux`. terminal multiplexer
+- `tmux-sessionizer`. tmux session management
 
 Install dependencies with homebrew (or any other package manager)
 
 ```bash
-brew install stow zoxide eza fzf bat jandedobbeleer/oh-my-posh/oh-my-posh
+brew install stow zoxide fzf ripgrep fd starship neovim eza bat tmux tmux-sessionizer
 ```
 
 Clone this repo into your home directory (or wherever you want)

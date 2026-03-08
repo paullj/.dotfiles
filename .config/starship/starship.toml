@@ -1,0 +1,83 @@
+add_newline = true
+
+format = """
+$directory\
+$git_branch\
+${custom.git_dirty}\
+$git_status\
+$fill\
+$python\
+$cmd_duration\
+$line_break\
+$character"""
+
+continuation_prompt = "[❯❯ ](magenta)"
+
+[fill]
+symbol = " "
+
+[directory]
+truncation_length = 255
+truncate_to_repo = false
+style = "blue"
+read_only = ""
+fish_style_pwd_dir_length = 0
+
+[git_branch]
+format = " [$branch]($style)"
+style = "grey"
+
+[custom.git_dirty]
+command = "echo '*'"
+when = "test -n \"$(git status --porcelain 2>/dev/null)\""
+format = " [$output]($style)"
+style = "grey"
+
+[git_status]
+format = "[ $ahead_behind]($style)"
+style = "cyan"
+diverged = "⇡⇣"
+ahead = "⇡"
+behind = "⇣"
+up_to_date = ""
+
+[character]
+success_symbol = "[❯](magenta)"
+error_symbol = "[❯](red)"
+
+[python]
+format = "[$virtualenv $version]($style) "
+style = "grey"
+detect_extensions = []
+detect_files = []
+detect_folders = []
+
+[cmd_duration]
+min_time = 5000
+format = "[${duration}]($style)"
+style = "yellow"
+show_milliseconds = false
+
+[package]
+disabled = true
+
+[nodejs]
+disabled = true
+
+[rust]
+disabled = true
+
+[golang]
+disabled = true
+
+[java]
+disabled = true
+
+[ruby]
+disabled = true
+
+[lua]
+disabled = true
+
+[c]
+disabled = true

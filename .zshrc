@@ -32,22 +32,14 @@ zinit light zsh-users/zsh-autosuggestions
 zinit ice wait lucid
 zinit light aloxaf/fzf-tab
 
-export AUTOSWITCH_SILENT=TRUE && zinit wait lucid for michaelaquilina/zsh-autoswitch-virtualenv
-
-# Load oh-my-posh (as long as we're not in Apple Terminal)
+# Load starship prompt (as long as we're not in Apple Terminal)
 if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-    eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/prompt.toml)"
+    export STARSHIP_CONFIG=~/.config/starship/starship.toml
+    eval "$(starship init zsh)"
 fi
 
 # Key bindings
 bindkey -e
-# bindkey '\e[1;9D' beginning-of-line     # cmd+left
-# bindkey '\e[1;9C' end-of-line           # cmd+right
-# bindkey '\e[1;9Z' undo                  # cmd+z
-# bindkey '\e[1;10Z' redo                 # cmd+shift+z
-# bindkey '\e[3;9~' backward-kill-line    # cmd+backspace
-# bindkey "^p" history-search-backward
-# bindkey "^n" history-search-forward
 
 # Completions
 setopt always_to_end                    # Move cursor to the end of a completed word
@@ -71,28 +63,70 @@ setopt hist_find_no_dups
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'gls --hyperlink --color --all $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'gls --hyperlink --color $realpath'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls -A $realpath'
 
-# Aliases
-alias ls='gls --hyperlink --color'
-alias vim='nvim'
+# Aliases ls with eza if available
+if command -v eza &> /dev/null; then
+    alias ls='eza --hyperlink --color=always'
+    alias ll='eza --hyperlink --color=always -l'
+    alias lt='eza --hyperlink --color=always -T'
+else
+    # Fallback to default ls
+    alias ls='ls --color=always'
+    alias ll='ls --color=always -l'
+fi
+
+# Alias cat with bat if available
+if command -v bat &> /dev/null; then
+    alias cat='bat -P'
+fi
+
+alias timeout="gtimeout"
 
 # Shell integration
 eval "$(fzf --zsh)"
-eval "$(zoxide init --cmd cd zsh)"
+
+if command -v zoxide &>/dev/null && [[ "$CLAUDECODE" != "1" ]]; then
+  zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls -A $realpath'
+  eval "$(zoxide init --cmd cd zsh)"
+  
+  # Ensure __zoxide_z function exists
+  if ! type __zoxide_z &>/dev/null; then
+    function __zoxide_z() {
+      if [[ "$#" -eq 0 ]]; then
+        builtin cd ~
+      elif [[ "$#" -eq 1 ]] && { [[ -d "$1" ]] || [[ "$1" = '-' ]] || [[ "$1" =~ ^[-+][0-9]$ ]]; }; then
+        builtin cd "$1"
+      else
+        local result
+        result="$(command zoxide query --exclude "$(pwd)" -- "$@")" && builtin cd "${result}"
+      fi
+    }
+  fi
+fi
 
 
 ## Optional Tools
 
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+export PIPENV_VENV_IN_PROJECT=1
 
 # cargo
 . "$HOME/.cargo/env"
 
-# bun
-export BUN_INSTALL="$HOME/Library/Application Support/reflex/bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+. "$HOME/.local/bin/env"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Source local env overrides (not in git)
+[ -f ~/.zshenv.local ] && source ~/.zshenv.local
+
+# Shell functions
+source ~/.zsh_functions
+
+source <(COMPLETE=zsh tms)
+export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
+eval "$(mise activate zsh)"
+
+fpath+=~/.zfunc; autoload -Uz compinit; compinit

@@ -1,9 +1,9 @@
 return {
+  -- yanky (replaces lazyvim.plugins.extras.coding.yanky with keys-only loading)
   {
     "gbprod/yanky.nvim",
     recommended = true,
     desc = "Better Yank/Paste",
-    event = "LazyFile",
     opts = {
       system_clipboard = {
         sync_with_ring = not vim.env.SSH_CONNECTION,
@@ -25,8 +25,8 @@ return {
         mode = { "n", "x" },
         desc = "Open Yank History",
       },
-        -- stylua: ignore
-    { "y", "<Plug>(YankyYank)", mode = { "n", "x" }, desc = "Yank Text" },
+      -- stylua: ignore start
+      { "y", "<Plug>(YankyYank)", mode = { "n", "x" }, desc = "Yank Text" },
       { "p", "<Plug>(YankyPutAfter)", mode = { "n", "x" }, desc = "Put Text After Cursor" },
       { "P", "<Plug>(YankyPutBefore)", mode = { "n", "x" }, desc = "Put Text Before Cursor" },
       { "gp", "<Plug>(YankyGPutAfter)", mode = { "n", "x" }, desc = "Put Text After Selection" },
@@ -43,7 +43,16 @@ return {
       { "<P", "<Plug>(YankyPutIndentBeforeShiftLeft)", desc = "Put Before and Indent Left" },
       { "=p", "<Plug>(YankyPutAfterFilter)", desc = "Put After Applying a Filter" },
       { "=P", "<Plug>(YankyPutBeforeFilter)", desc = "Put Before Applying a Filter" },
+      -- stylua: ignore end
     },
   },
   { "nvim-mini/mini.ai", enabled = false },
+  {
+    "folke/flash.nvim",
+    keys = {
+      { "S", false },
+      { "f", false },
+      { "t", false },
+    },
+  },
 }

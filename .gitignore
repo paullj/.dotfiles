@@ -1,0 +1,9 @@
+.zshenv.local
+.DS_Store
+*.pem
+*.key
+*.secret
+*_rsa
+*_ed25519
+.env*
+!.env.example
