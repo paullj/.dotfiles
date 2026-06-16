@@ -1,5 +1,17 @@
-eval "$(/opt/homebrew/bin/brew shellenv)"
 export HOMEBREW_NO_ENV_HINTS=TRUE
+
+# Cache subprocess eval output; rebuild when source binary is newer
+_cache_eval() {
+    local name="$1" bin="$2"; shift 2
+    local cache="$HOME/.cache/zsh/${name}.zsh"
+    if [[ ! -f $cache ]] || [[ $bin -nt $cache ]]; then
+        mkdir -p ${cache:h}
+        "$@" > $cache 2>/dev/null
+    fi
+    source $cache
+}
+
+_cache_eval brew /opt/homebrew/bin/brew /opt/homebrew/bin/brew shellenv
 
 # Set the directory where zinit and its plugins will be installed
 ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
@@ -20,7 +32,15 @@ source "$ZINIT_HOME/zinit.zsh"
 # Add zsh completions
 zinit ice blockf atpull'zinit creinstall -q .' wait lucid
 zinit light zsh-users/zsh-completions
-autoload compinit && compinit
+
+# Single compinit with caching (rebuilds .zcompdump once per day)
+fpath+=~/.zfunc
+autoload -Uz compinit
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qNmh-24) ]]; then
+    compinit -C
+else
+    compinit
+fi
 
 # Add other zsh plugins
 zinit ice wait lucid
@@ -35,7 +55,7 @@ zinit light aloxaf/fzf-tab
 # Load starship prompt (as long as we're not in Apple Terminal)
 if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
     export STARSHIP_CONFIG=~/.config/starship/starship.toml
-    eval "$(starship init zsh)"
+    _cache_eval starship $(command -v starship) starship init zsh
 fi
 
 # Key bindings
@@ -84,11 +104,11 @@ fi
 alias timeout="gtimeout"
 
 # Shell integration
-eval "$(fzf --zsh)"
+_cache_eval fzf $(command -v fzf) fzf --zsh
 
 if command -v zoxide &>/dev/null && [[ "$CLAUDECODE" != "1" ]]; then
   zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls -A $realpath'
-  eval "$(zoxide init --cmd cd zsh)"
+  _cache_eval zoxide $(command -v zoxide) zoxide init --cmd cd zsh
   
   # Ensure __zoxide_z function exists
   if ! type __zoxide_z &>/dev/null; then
@@ -115,18 +135,13 @@ export PIPENV_VENV_IN_PROJECT=1
 
 . "$HOME/.local/bin/env"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # Source local env overrides (not in git)
 [ -f ~/.zshenv.local ] && source ~/.zshenv.local
 
 # Shell functions
 source ~/.zsh_functions
 
-source <(COMPLETE=zsh tms)
+_cache_eval tms $(command -v tms) env COMPLETE=zsh tms
 export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
-eval "$(mise activate zsh)"
+_cache_eval mise $(command -v mise) mise activate zsh
 
-fpath+=~/.zfunc; autoload -Uz compinit; compinit

@@ -1,9 +1,9 @@
 add_newline = true
+command_timeout = 2000
 
 format = """
 $directory\
 $git_branch\
-${custom.git_dirty}\
 $git_status\
 $fill\
 $python\
@@ -17,40 +17,34 @@ continuation_prompt = "[❯❯ ](magenta)"
 symbol = " "
 
 [directory]
-truncation_length = 255
-truncate_to_repo = false
+truncation_length = 3
+truncate_to_repo = true
 style = "blue"
 read_only = ""
-fish_style_pwd_dir_length = 0
 
 [git_branch]
 format = " [$branch]($style)"
 style = "grey"
 
-[custom.git_dirty]
-command = "echo '*'"
-when = "test -n \"$(git status --porcelain 2>/dev/null)\""
-format = " [$output]($style)"
-style = "grey"
-
 [git_status]
-format = "[ $ahead_behind]($style)"
+format = '([ $ahead_behind$modified$untracked$staged$renamed$deleted$conflicted]($style))'
 style = "cyan"
+modified = "*"
+staged = "+"
+untracked = "?"
+renamed = ""
+deleted = "x"
+conflicted = "!"
+stashed = ""
 diverged = "⇡⇣"
 ahead = "⇡"
 behind = "⇣"
 up_to_date = ""
+ignore_submodules = true
 
 [character]
 success_symbol = "[❯](magenta)"
 error_symbol = "[❯](red)"
-
-[python]
-format = "[$virtualenv $version]($style) "
-style = "grey"
-detect_extensions = []
-detect_files = []
-detect_folders = []
 
 [cmd_duration]
 min_time = 5000
@@ -63,6 +57,11 @@ disabled = true
 
 [nodejs]
 disabled = true
+
+[python]
+format = "[ $virtualenv]($style)"
+style = "yellow"
+python_binary = []
 
 [rust]
 disabled = true
@@ -80,4 +79,13 @@ disabled = true
 disabled = true
 
 [c]
+disabled = true
+
+[docker_context]
+disabled = true
+
+[aws]
+disabled = true
+
+[gcloud]
 disabled = true

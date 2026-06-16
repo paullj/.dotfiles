@@ -109,6 +109,15 @@ return {
           end,
         },
         bufls = {},
+        sourcekit = {
+          cmd = { "sourcekit-lsp" },
+          filetypes = { "swift" },
+          root_dir = function(fname)
+            local util = require("lspconfig.util")
+            return util.root_pattern("project.yml", "Package.swift", "*.xcodeproj")(fname)
+                or util.find_git_ancestor(fname)
+          end,
+        },
       },
     },
   },
