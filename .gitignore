@@ -7,3 +7,6 @@
 *_ed25519
 .env*
 !.env.example
+
+# Machine-specific config
+*.local

@@ -1,23 +1,9 @@
 # .dotfiles
 
-To use these dotfiles, you will need the following dependencies:
-
-- `stow`. sym-link configs
-- `zoxide`. cd into recent folders
-- `fzf`. fuzzy finder
-- `ripgrep`. better grep
-- `fd`. better find:
-- `starship`. terminal prompt 
-- `neovim`. text editor
-- `eza`. better ls
-- `bat`. better cat
-- `tmux`. terminal multiplexer
-- `tmux-sessionizer`. tmux session management
-
-Install dependencies with homebrew (or any other package manager)
+Install [Homebrew](https://brew.sh) if you do not have it
 
 ```bash
-brew install stow zoxide fzf ripgrep fd starship neovim eza bat tmux tmux-sessionizer
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
 Clone this repo into your home directory (or wherever you want)
@@ -39,8 +25,23 @@ Navigate to the .dotfiles directory
 cd ~/.dotfiles
 ```
 
-Run stow to symlink the files
+Install all dependencies from the `Brewfile` (each entry has a comment that says
+what it is)
 
 ```bash
- stow . --target=$HOME
+brew bundle
 ```
+
+Run stow to symlink the files. Files listed in `.stow-local-ignore` (for
+example this README and the `Brewfile`) are not linked.
+
+```bash
+stow . --target=$HOME
+```
+
+## Local config
+
+Machine-specific config stays out of git (`*.local` is in `.gitignore`):
+
+- `~/.zshenv.local`. Private environment variables
+- `~/.ssh/config.local`. Private SSH hosts. `.ssh/config` includes this file

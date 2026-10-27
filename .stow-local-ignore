@@ -1,0 +1,13 @@
+# Defaults (this file replaces stow's built-in ignore list)
+\.git
+\.gitignore
+\.gitmodules
+^/README.*
+^/LICENSE.*
+^/COPYING
+
+# Repo-only files
+^/\.claude
+^/Brewfile
+^/\.stow-local-ignore
+\.DS_Store
