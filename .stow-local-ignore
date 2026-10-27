@@ -11,3 +11,4 @@
 ^/Brewfile
 ^/\.stow-local-ignore
 \.DS_Store
+^/\.macos

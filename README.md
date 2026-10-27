@@ -39,6 +39,13 @@ example this README and the `Brewfile`) are not linked.
 stow . --target=$HOME
 ```
 
+Apply the macOS settings. The script asks for your password, then restarts
+Dock, Finder and SystemUIServer. Some changes need a logout or restart.
+
+```bash
+./.macos
+```
+
 ## Local config
 
 Machine-specific config stays out of git (`*.local` is in `.gitignore`):

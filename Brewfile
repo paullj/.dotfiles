@@ -55,6 +55,8 @@ cask "aerospace"                                # tiling window manager
 cask "circleci-public/circleci/circleci@next", trusted: true # CircleCI CLI
 cask "font-jetbrains-mono-nerd-font"            # terminal font with icons
 cask "ghostty"                                  # terminal emulator
+cask "hiddenbar"                                # hide menu bar icons behind a chevron
+cask "notion-calendar"                          # calendar with menu bar icon
 cask "orbstack"                                 # Docker and Linux VMs
 cask "raycast"                                  # app launcher
 cask "whosthere"                                # whosthere app
