@@ -1,11 +1,5 @@
 # .dotfiles
 
-Install [Homebrew](https://brew.sh) if you do not have it
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
 Clone this repo into your home directory (or wherever you want)
 
 ```bash
