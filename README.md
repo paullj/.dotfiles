@@ -23,7 +23,14 @@ brew install stow zoxide fzf ripgrep fd starship neovim eza bat tmux tmux-sessio
 Clone this repo into your home directory (or wherever you want)
 
 ```bash
-git clone git@github.com:paullj/.dotfiles.git ~/.dotfiles
+git clone --recurse-submodules git@github.com:paullj/.dotfiles.git ~/.dotfiles
+```
+
+The tmux plugins (`tmux-resurrect`, `tmux-continuum`) are git submodules. If you
+cloned without `--recurse-submodules`, get them with
+
+```bash
+git submodule update --init
 ```
 
 Navigate to the .dotfiles directory

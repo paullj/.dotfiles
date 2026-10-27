@@ -125,7 +125,6 @@ if command -v zoxide &>/dev/null && [[ "$CLAUDECODE" != "1" ]]; then
   fi
 fi
 
-
 ## Optional Tools
 
 export PIPENV_VENV_IN_PROJECT=1
@@ -135,13 +134,9 @@ export PIPENV_VENV_IN_PROJECT=1
 
 . "$HOME/.local/bin/env"
 
-# Source local env overrides (not in git)
-[ -f ~/.zshenv.local ] && source ~/.zshenv.local
-
 # Shell functions
 source ~/.zsh_functions
 
 _cache_eval tms $(command -v tms) env COMPLETE=zsh tms
 export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
 _cache_eval mise $(command -v mise) mise activate zsh
-

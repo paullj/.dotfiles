@@ -13,9 +13,16 @@ after-startup-command = [
 
 # Notify Sketchybar about workspace change
 exec-on-workspace-change = [
-  # '/bin/bash',
-  # '-c',
+  '/bin/bash',
+  '-c',
   # 'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+  # Make Loom windows (camera bubble) and the Notion Calendar notification window follow the focused workspace (AeroSpace has no sticky windows)
+  '''
+  a=/opt/homebrew/bin/aerospace
+  ids="$($a list-windows --monitor all --app-bundle-id com.loom.desktop --format "%{window-id}")
+  $($a list-windows --monitor all --app-bundle-id com.cron.electron --format "%{window-id}|%{window-title}" | awk -F"|" "\$2 == \"Notion Calendar\" {print \$1}")"
+  for id in $ids; do $a move-node-to-workspace --window-id "$id" "$AEROSPACE_FOCUSED_WORKSPACE"; done
+  ''',
 ]
 
 # Start AeroSpace at login
@@ -49,6 +56,11 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 # Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
 # Also see: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
 automatically-unhide-macos-hidden-apps = true
+
+# Assign the 'd' workspace to the secondary monitor when one is connected.
+# See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
+[workspace-to-monitor-force-assignment]
+d = 'secondary'
 
 # Possible values: (qwerty|dvorak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -123,16 +135,11 @@ alt-minus = 'resize smart -50'
 alt-equal = 'resize smart +50'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-alt-1 = 'workspace 1'
-alt-2 = 'workspace 2'
-alt-3 = 'workspace 3'
-alt-4 = 'workspace 4'
-alt-5 = 'workspace 5'
-alt-6 = 'workspace 6'
-alt-7 = 'workspace 7'
-alt-8 = 'workspace 8'
-alt-9 = 'workspace 9'
-alt-0 = 'workspace 0'
+# Unassigned / open workspaces
+alt-leftSquareBracket = 'workspace ['
+alt-rightSquareBracket = 'workspace ]'
+alt-quote = 'workspace quote'
+alt-backslash = 'workspace backslash'
 
 
 alt-t = 'workspace t' # Terminal
@@ -140,22 +147,25 @@ alt-m = 'workspace m' # Spotify
 alt-b = 'workspace b' # Browser
 alt-s = 'workspace s' # Slack
 alt-z = 'workspace z' # Zoom
+alt-o = 'workspace o' # Obsidian
+alt-d = 'workspace d' # Second display
+alt-c = 'workspace c' # Notion Calendar
 
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-alt-shift-1 = 'move-node-to-workspace 1'
-alt-shift-2 = 'move-node-to-workspace 2'
-alt-shift-3 = 'move-node-to-workspace 3'
-alt-shift-4 = 'move-node-to-workspace 4'
-alt-shift-5 = 'move-node-to-workspace 5'
-alt-shift-6 = 'move-node-to-workspace 6'
-alt-shift-7 = 'move-node-to-workspace 7'
-alt-shift-8 = 'move-node-to-workspace 8'
-alt-shift-9 = 'move-node-to-workspace 9'
-alt-shift-0 = 'move-node-to-workspace 0'
+alt-shift-leftSquareBracket = 'move-node-to-workspace ['
+alt-shift-rightSquareBracket = 'move-node-to-workspace ]'
+alt-shift-quote = 'move-node-to-workspace quote'
+alt-shift-backslash = 'move-node-to-workspace backslash'
 
 alt-shift-t = 'move-node-to-workspace t' # Terminal
+alt-shift-m = 'move-node-to-workspace m' # Spotify
 alt-shift-b = 'move-node-to-workspace b' # Browser
+alt-shift-s = 'move-node-to-workspace s' # Slack
+alt-shift-z = 'move-node-to-workspace z' # Zoom
+alt-shift-o = 'move-node-to-workspace o' # Obsidian
+alt-shift-d = 'move-node-to-workspace d' # Second display
+alt-shift-c = 'move-node-to-workspace c' # Notion Calendar
 
 alt-shift-enter = "fullscreen"
 
@@ -213,6 +223,14 @@ check-further-callbacks = true
 run = 'layout floating'
 
 [[on-window-detected]]
+if.app-id = 'com.google.chrome.for.testing'
+run = 'move-node-to-workspace d' # d for second display (Chrome for Testing)
+
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = 'move-node-to-workspace o' # o for obsidian
+
+[[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = 'move-node-to-workspace s'        # s for slack
 
@@ -231,8 +249,12 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.cron.electron'
-check-further-callbacks = true
+if.window-title-regex-substring = '^Notion Calendar$' # notification window (main window title is '<dates> · Notion Calendar')
 run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.cron.electron'
+run = 'move-node-to-workspace c' # c for calendar (Notion Calendar)
 
 [[on-window-detected]]
 if.app-id = 'com.1password.1password'
